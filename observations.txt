@@ -1,0 +1,9 @@
+Looking for bottlenecks in production speed:
+
+-STRPL, AP, PRSHP, FLINS take longer on average than other locations
+
+- Metal dept a bottleneck? (AP)
+- Quality Contral (PRSHP)
+
+-INSP has the longest wait with 200 days (JUANITO CASTRO)
+-FLINS has the 2nd longest wait with an 169 day anomaly (due to one vendor - Precision Set Inc.)
