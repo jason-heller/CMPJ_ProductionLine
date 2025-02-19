@@ -1,5 +1,17 @@
 Looking for bottlenecks in production speed:
 
+=GENERAL OBSERVATIONS====================
+
+2.2 MM takes longer than bigger shanks
+
+Orders spike at the end of the year, wit most being due Dec 1 to Jan 1
+
+On average, pieces are due on average 60 days
+
+
+
+====================
+
 -STRPL, AP, PRSHP, FLINS take longer on average than other locations
 
 - Metal dept a bottleneck? (AP)
