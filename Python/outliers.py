@@ -21,6 +21,32 @@ dfDaysPivot.reset_index(inplace=True)
 
 dfDaysPivot.describe()
 
+Q1 = dfDaysPivot.quantile(0.25)
+Q3 = dfDaysPivot.quantile(0.75)
+IQR = Q3 - Q1
+
+# Define outliers (1.5 * IQR rule)
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+# Create a boolean mask for outliers
+outliers = (dfDaysPivot < lower_bound) | (dfDaysPivot > upper_bound)
+
+plt.figure(figsize=(8,6))
+plt.scatter(dfDaysPivot['Days'], dfDaysPivot['Location'], label="Normal Points", color='#0072B2', edgecolors='black')
+
+# Highlight outliers in red
+plt.scatter(dfDaysPivot.loc[outliers.any(axis=1), 'Days'], dfDaysPivot.loc[outliers.any(axis=1), 'Location'], 
+            color='#E69F00', edgecolors='black', label="Outliers")
+
+plt.xlabel('Days in Production')
+plt.ylabel('Total Locations Visited')
+plt.title('Days vs Total Locations Visited')
+plt.legend()
+#plt.show()
+
+print(dfDaysPivot.loc[outliers.any(axis=1)].to_string())
+
 #Elbow method to find best number of clusters
 dfDaysPivot = dfDaysPivot.select_dtypes(include='number')
 # Data Preprocessing
@@ -40,16 +66,16 @@ for n_clusters in cluster_options:
     inertia.append(kmeans.inertia_)
 
 # Plot the inertia to see which number of clusters is best
-plt.plot(cluster_options, inertia, '-o')
-plt.xlabel('Number of clusters, k')
-plt.ylabel('Inertia')
-plt.title('Inertia of k-Means versus number of clusters')
-plt.show()
+#plt.plot(cluster_options, inertia, '-o')
+#plt.xlabel('Number of clusters, k')
+#plt.ylabel('Inertia')
+#plt.title('Inertia of k-Means versus number of clusters')
+#plt.show()
 
-# KMeans with 3 clusters
+# KMeans with 4 clusters
 scaler = StandardScaler()
 scaled_data = scaler.fit_transform(dfDaysPivot)
-kmeans = KMeans(n_clusters=3, random_state=0) 
+kmeans = KMeans(n_clusters=4, random_state=0) 
 dfDaysPivot['cluster'] = kmeans.fit_predict(scaled_data)
 
 uniqueClusters = dfDaysPivot['cluster'].unique()
@@ -60,10 +86,12 @@ plt.figure(figsize=(8, 6))
 scatter = plt.scatter(dfDaysPivot['Days'], dfDaysPivot['Location'], c=dfDaysPivot['cluster'], cmap='viridis', marker='o', edgecolor='k')
 
 #plt.scatter(x=dfDaysPivot['Days'], y=dfDaysPivot['Location'], s = 10)
-plt.xlabel("Days In Production")
-plt.ylabel("# Locations Visited")
-plt.colorbar(label='Cluster')
-plt.show()
+
+#plt.xlabel("Days In Production")
+#plt.ylabel("# Locations Visited")
+#plt.colorbar(label='Cluster')
+#plt.show()
+#print(dfDaysPivot);
 
 # DBScan 
 dbscan = DBSCAN(eps=10.0, min_samples=10)
@@ -85,7 +113,7 @@ for i, clustedId in enumerate(uniqueClusters):
 
 
 #plt.scatter(x=dfDaysPivot['Days'], y=dfDaysPivot['Location'], s = 10)
-plt.xlabel("Days In Production")
-plt.ylabel("# Locations Visited")
-plt.legend()
-plt.show()
+#plt.xlabel("Days In Production")
+#plt.ylabel("# Locations Visited")
+#plt.legend()
+#plt.show()
